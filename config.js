@@ -4,6 +4,6 @@
 window.FF_SITE = {
   supabaseUrl: "https://fhmkxgyidxbxxoybqbfp.supabase.co",
   publishableKey: "sb_publishable_z5cA1-YQwjsg4SUih06DEA_xyiAdiHi",
-  oauthProviders: [],
+  oauthProviders: ["google", "kakao"],
   supportEmail: "support@greenjlab.com",
 };
