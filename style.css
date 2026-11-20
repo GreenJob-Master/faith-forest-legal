@@ -64,15 +64,6 @@ body {
 
 .company { margin: 0; color: var(--sub); }
 
-.draft {
-  margin: 0.75rem 0 0;
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  background: var(--note-bg);
-  color: var(--note-ink);
-  font-weight: 700;
-}
-
 h1 { margin: 1.5rem 0 0.5rem; font-size: 1.625rem; line-height: 1.35; }
 
 h2 {

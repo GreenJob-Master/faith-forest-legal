@@ -1,7 +1,7 @@
 # 믿음의 숲 약관·정책 웹페이지
 
 GitHub Pages에 올리는 정적 파일입니다. 앱 번들에는 들어가지 않습니다.
-모든 문서는 **초안 — 공개 출시 전 법률 점검 예정**입니다.
+2026-11-19에 `docs/legal/privacy-guideline-check.md`의 열린 질문을 모두 더 안전한 쪽으로 반영해 초안 표시를 지웠습니다(시행일 2026-11-19).
 
 | 파일 | 내용 | 앱의 주소(`LEGAL_URLS`) |
 |---|---|---|
@@ -14,6 +14,7 @@ GitHub Pages에 올리는 정적 파일입니다. 앱 번들에는 들어가지 
 | `style.css` | 공통 스타일(본문 17px, 누르는 곳 48px 이상) | — |
 | `config.js` | 웹 삭제 설정(Supabase 주소·공개 키·로그인 제공자·연락 이메일) | — |
 | `delete-account.js` | 웹 삭제 흐름(로그인 → 확인 → `delete_my_account`) | — |
+| `vendor/supabase-js-2.118.0.js` | 웹 삭제가 쓰는 supabase-js(npm `@supabase/supabase-js@2.118.0`의 `dist/umd/supabase.js` 그대로) | — |
 
 GitHub Pages는 `/legal/terms` 요청에 `terms.html`을 돌려주므로, 앱의 주소에는 `.html`을 붙이지 않습니다.
 
@@ -30,11 +31,12 @@ GitHub Pages는 `/legal/terms` 요청에 `terms.html`을 돌려주므로, 앱의
 | 개인정보 보호책임자 | `privacy.html` | 이름(직책) |
 | 시행일 | `terms`·`privacy`·`sensitive`·`overseas` | 네 문서가 같은 날짜 |
 | Supabase 주소·공개 키 | `config.js` | 앱의 `.env.local`과 같은 값 |
+| 로그인 제공자 | `config.js`의 `oauthProviders` | 앱의 `EXPO_PUBLIC_OAUTH_PROVIDERS`와 같게 |
 
 - 값을 바꾸면 `src/features/legal/__tests__/sitePages.test.ts`의 `BUSINESS`도 같이 바꿉니다. 테스트가 모든 문서의 바닥글·이메일·시행일이 같은지 봅니다.
 - `config.js`에는 **공개 키만** 넣습니다. 비밀 키(`sb_secret_…`, `service_role`)는 절대 넣지 않습니다(테스트가 비밀 키 모양을 찾으면 실패).
 - `config.js`의 주소나 공개 키가 비었거나 자리표시(두 겹 대괄호)가 남아 있으면 웹 삭제는 "지금은 이 페이지에서 삭제할 수 없어요"를 보이고, 앱·이메일 경로만 안내합니다.
-- Google·카카오 로그인을 켜면 `config.js`의 `oauthProviders`에 `"google"`, `"kakao"`를 적고, Supabase의 Redirect URLs에 `https://<아이디>.github.io/**`를 더합니다.
+- `config.js`의 `oauthProviders`는 켠 로그인만 적습니다. 지금은 `["google", "kakao"]`입니다(2026-11-14, 가이드 06·07 완료). 웹 삭제 페이지에서 돌아오는 주소 `https://greenjob-master.github.io/**`는 Supabase Redirect URLs에 있습니다. 제공자를 끄면 여기서도 빼고 테스트의 기대값도 바꿉니다.
 
 ## 게시 전 확인 (문서의 문장이 사실이 되려면)
 
@@ -49,7 +51,7 @@ GitHub Pages는 `/legal/terms` 요청에 `terms.html`을 돌려주므로, 앱의
 ## 바꿀 때 지킬 것
 
 - `delete-account.js`의 오류 문구는 앱(`src/lib/errors.ts`, `src/features/auth/authErrors.ts`)과 같은 문장입니다. 앱 문구를 바꾸면 여기도 바꿉니다.
-- supabase-js는 jsDelivr의 고정 버전(`@2.118.0`)과 무결성 값(`integrity`)으로 받습니다. 버전을 바꾸면 무결성 값도 다시 계산합니다.
+- supabase-js는 외부 CDN 없이 `vendor/`에 둔 파일을 무결성 값(`integrity`)과 함께 불러오며, 보안 정책의 `script-src`는 `'self'`뿐입니다. 버전을 바꾸면 파일 이름·무결성 값·테스트를 함께 바꿉니다. 외부 스크립트를 다시 쓰면 개인정보처리방침의 국외 이전 항목도 고칩니다.
 - `delete-account.html`의 보안 정책(`Content-Security-Policy`)은 `https://*.supabase.co`에만 연결을 허용합니다. 셀프호스팅으로 서버 주소가 바뀌면 이 값도 바꿉니다.
 - 웹 삭제의 로그인 상태와 PKCE 값은 그 탭의 `sessionStorage`에만 둡니다(보통 탭을 닫으면 사라지지만, 브라우저가 탭을 되살리면 남을 수 있음). `localStorage`로 바꾸지 않습니다.
 - 이 폴더는 `npm test`(`src/features/legal/__tests__/sitePages.test.ts`, `deleteAccountPage.test.ts`, `deleteAccountBoot.test.ts`)가 검사합니다. 린트는 이 폴더를 보지 않습니다.
